@@ -1,0 +1,34 @@
+# Android Studio / IntelliJ
+*.iml
+/local.properties
+/.idea/
+
+# Built variants
+/build/
+/app/build/
+/captures/
+
+# OS generated
+.DS_Store
+
+# Android-specific
+.externalNativeBuild/
+.cxx/
+
+# Kotlin
+.kotlin/
+/out/
+
+# Gradle related
+.gradle/
+build/
+/*/build/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# User-specific
+local.properties
+
+# AI
+.agent/

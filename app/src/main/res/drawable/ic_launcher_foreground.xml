@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer stylized AI node -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,24L64.5,43.5L84,54L64.5,64.5L54,84L43.5,64.5L24,54L43.5,43.5Z" />
+
+    <!-- Inner core -->
+    <path
+        android:fillColor="#BB86FC"
+        android:pathData="M54,44a10,10 0 1,0 0,20a10,10 0 1,0 0,-20" />
+
+    <!-- Connectivity dots -->
+    <path
+        android:fillColor="#03DAC5"
+        android:pathData="M54,32a3,3 0 1,0 0,6a3,3 0 1,0 0,-6" />
+    <path
+        android:fillColor="#03DAC5"
+        android:pathData="M76,54a3,3 0 1,0 0,6a3,3 0 1,0 0,-6" />
+    <path
+        android:fillColor="#03DAC5"
+        android:pathData="M54,76a3,3 0 1,0 0,6a3,3 0 1,0 0,-6" />
+    <path
+        android:fillColor="#03DAC5"
+        android:pathData="M32,54a3,3 0 1,0 0,6a3,3 0 1,0 0,-6" />
+</vector>
