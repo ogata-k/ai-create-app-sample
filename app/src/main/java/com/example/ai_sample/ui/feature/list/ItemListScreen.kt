@@ -30,14 +30,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.example.ai_sample.data.model.Item
-import com.example.ai_sample.data.repository.ItemRepository
 import com.example.ai_sample.ui.feature.detail.DetailRoute
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
@@ -48,11 +47,8 @@ object ListRoute
 @Composable
 fun ItemListRoute(
     navController: NavController,
-    repository: ItemRepository
+    viewModel: ItemListViewModel = hiltViewModel()
 ) {
-    val viewModel: ItemListViewModel = viewModel(
-        factory = ItemListViewModelFactory(repository)
-    )
     val state by viewModel.state.collectAsState()
     val pagedItems = viewModel.pagedItems.collectAsLazyPagingItems()
 

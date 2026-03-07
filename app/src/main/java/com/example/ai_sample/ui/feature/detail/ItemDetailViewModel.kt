@@ -1,15 +1,20 @@
 package com.example.ai_sample.ui.feature.detail
 
+import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.example.ai_sample.core.AppEvent
 import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.core.BaseViewModel
 import com.example.ai_sample.core.LoggingMiddleware
 import com.example.ai_sample.core.TimingMiddleware
 import com.example.ai_sample.data.repository.ItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ItemDetailViewModel(
+@HiltViewModel
+class ItemDetailViewModel @Inject constructor(
     private val repository: ItemRepository,
-    private val itemId: Int
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ItemDetailState, ItemDetailIntent, ItemDetailAction, ItemDetailMutation, ItemDetailEffect>(
     initialState = ItemDetailState(),
     reducer = ItemDetailReducer(),
@@ -19,6 +24,8 @@ class ItemDetailViewModel(
         TimingMiddleware()
     )
 ) {
+    private val detailRoute = savedStateHandle.toRoute<DetailRoute>()
+    private val itemId = detailRoute.itemId
 
     init {
         dispatch(ItemDetailIntent.LoadItemRequested(itemId))

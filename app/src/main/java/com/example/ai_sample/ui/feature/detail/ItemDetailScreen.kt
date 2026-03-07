@@ -30,9 +30,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.ai_sample.data.repository.ItemRepository
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.Serializable
 
@@ -41,13 +40,9 @@ data class DetailRoute(val itemId: Int)
 
 @Composable
 fun ItemDetailRoute(
-    route: DetailRoute,
     navController: NavController,
-    repository: ItemRepository
+    viewModel: ItemDetailViewModel = hiltViewModel()
 ) {
-    val viewModel: ItemDetailViewModel = viewModel(
-        factory = ItemDetailViewModelFactory(repository, route.itemId)
-    )
     val state by viewModel.state.collectAsState()
 
     // Handle effects

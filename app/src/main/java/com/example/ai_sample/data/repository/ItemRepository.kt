@@ -8,8 +8,13 @@ import com.example.ai_sample.data.model.Item
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ItemRepository(private val apiService: ApiService) {
+@Singleton
+class ItemRepository @Inject constructor(
+    private val apiService: ApiService
+) {
 
     fun getItemPager(): Flow<PagingData<Item>> {
         return Pager(
@@ -23,8 +28,6 @@ class ItemRepository(private val apiService: ApiService) {
 
     suspend fun getItems(): Result<List<Item>> = withContext(Dispatchers.IO) {
         try {
-            // This is still here for non-paging usage if needed, 
-            // but we'll use getItemPager for the list.
             val response = apiService.getItems(page = 1, limit = 100)
             Result.success(response)
         } catch (e: Exception) {

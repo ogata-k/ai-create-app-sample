@@ -15,37 +15,20 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.example.ai_sample.core.AppEvent
 import com.example.ai_sample.core.AppEventBus
-import com.example.ai_sample.data.api.ApiService
-import com.example.ai_sample.data.repository.ItemRepository
 import com.example.ai_sample.ui.feature.detail.DetailRoute
 import com.example.ai_sample.ui.feature.detail.ItemDetailRoute
 import com.example.ai_sample.ui.feature.list.ItemListRoute
 import com.example.ai_sample.ui.feature.list.ListRoute
 import com.example.ai_sample.ui.theme.AISampleTheme
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
-        val moshi = Moshi.Builder()
-            .add(KotlinJsonAdapterFactory())
-            .build()
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://jsonplaceholder.typicode.com/")
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .build()
-
-        val apiService = retrofit.create(ApiService::class.java)
-        val itemRepository = ItemRepository(apiService)
 
         setContent {
             AISampleTheme {
@@ -77,16 +60,12 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable<ListRoute> {
                             ItemListRoute(
-                                navController = navController,
-                                repository = itemRepository
+                                navController = navController
                             )
                         }
-                        composable<DetailRoute> { backStackEntry ->
-                            val detailRoute = backStackEntry.toRoute<DetailRoute>()
+                        composable<DetailRoute> {
                             ItemDetailRoute(
-                                route = detailRoute,
-                                navController = navController,
-                                repository = itemRepository
+                                navController = navController
                             )
                         }
                     }

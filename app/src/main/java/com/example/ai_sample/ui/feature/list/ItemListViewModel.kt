@@ -10,9 +10,12 @@ import com.example.ai_sample.core.LoggingMiddleware
 import com.example.ai_sample.core.TimingMiddleware
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.repository.ItemRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class ItemListViewModel(
+@HiltViewModel
+class ItemListViewModel @Inject constructor(
     private val repository: ItemRepository
 ) : BaseViewModel<ItemListState, ItemListIntent, ItemListAction, ItemListMutation, ItemListEffect>(
     initialState = ItemListState(),
