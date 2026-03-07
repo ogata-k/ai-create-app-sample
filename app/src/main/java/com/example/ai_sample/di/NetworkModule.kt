@@ -14,27 +14,16 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-
     @Provides
     @Singleton
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder()
+    fun provideApiService(): ApiService {
+        val moshi = Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(moshi: Moshi): Retrofit {
-        return Retrofit.Builder()
+        val retrofit = Retrofit.Builder()
             .baseUrl("https://jsonplaceholder.typicode.com/")
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
     }
 }

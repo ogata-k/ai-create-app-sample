@@ -1,6 +1,8 @@
 package com.example.ai_sample.ui.feature.list
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.ai_sample.core.AppEvent
@@ -9,6 +11,7 @@ import com.example.ai_sample.core.BaseViewModel
 import com.example.ai_sample.core.LoggingMiddleware
 import com.example.ai_sample.core.TimingMiddleware
 import com.example.ai_sample.data.model.Item
+import com.example.ai_sample.data.paging_source.ItemPagingSource
 import com.example.ai_sample.data.repository.ItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -27,7 +30,14 @@ class ItemListViewModel @Inject constructor(
     )
 ) {
 
-    val pagedItems: Flow<PagingData<Item>> = repository.getItemPager()
+    val pagedItems: Flow<PagingData<Item>> = Pager(
+        config = PagingConfig(
+            pageSize = 20,
+            enablePlaceholders = false
+        ),
+        pagingSourceFactory = { ItemPagingSource(repository) }
+    )
+        .flow
         .cachedIn(viewModelScope)
 
     init {
@@ -52,14 +62,14 @@ class ItemListViewModel @Inject constructor(
 
     private suspend fun fetchItems() {
         emitMutation(ItemListMutation.Loading)
-        repository.getItems()
-            .onSuccess { items ->
-                emitMutation(ItemListMutation.ItemsLoaded(items))
-            }
-            .onFailure { error ->
-                val errorMessage = error.message ?: "Failed to load items"
-                emitMutation(ItemListMutation.Error(errorMessage))
-                AppEventBus.tryEmit(AppEvent.ShowSnackbar(errorMessage))
-            }
+        // Note: For non-paged initial load or other purposes
+        try {
+            val items = repository.getItems(page = 1, limit = 100)
+            emitMutation(ItemListMutation.ItemsLoaded(items))
+        } catch (e: Exception) {
+            val errorMessage = e.message ?: "Failed to load items"
+            emitMutation(ItemListMutation.Error(errorMessage))
+            AppEventBus.tryEmit(AppEvent.ShowSnackbar(errorMessage))
+        }
     }
 }

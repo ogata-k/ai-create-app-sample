@@ -50,6 +50,7 @@ kotlin {
 // Workaround for AGP bug: Cannot fingerprint input property 'compileVersionMap'
 // This disables the classpath check tasks that are currently failing due to internal AGP serialization issues.
 tasks.configureEach {
+    // hiltを導入する際にmoshiのfingerprint未対応によりサポート外のjdk版kotlinとhilt?のstdlib版のkotlinと衝突した。そのための対応。
     if (name.contains("check", ignoreCase = true) && name.contains(
             "Classpath",
             ignoreCase = true
