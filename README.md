@@ -4,8 +4,8 @@
 
 ## プロジェクトの概要
 
-このプロジェクトは、Jetpack Compose、Paging
-3、および独自の実装によるMVI（Model-View-Intent）アーキテクチャを採用したAndroidアプリのサンプルです。
+このプロジェクトは、Jetpack
+Compose、Paging3、および独自の実装によるMVI（Model-View-Intent）アーキテクチャを採用したAndroidアプリのサンプルです。
 JSONPlaceholder APIを使用して、アイテムの一覧表示と詳細表示を行います。
 
 ## 技術スタック
