@@ -1,5 +1,6 @@
 package com.example.ai_sample.ui.feature.detail
 
+import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.example.ai_sample.core.AppEvent
@@ -27,6 +28,9 @@ class ItemDetailViewModelTest {
     private val testDispatcher = StandardTestDispatcher()
     private val itemId = 1
 
+    private fun createSavedStateHandle(id: Int = itemId): SavedStateHandle =
+        SavedStateHandle(mapOf("itemId" to id))
+
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
@@ -42,10 +46,10 @@ class ItemDetailViewModelTest {
         runTest {
             // Given
             val item = Item(id = itemId, title = "Title", body = "Body", userId = 1)
-            coEvery { repository.getItem(itemId) } returns Result.success(item)
+            coEvery { repository.getItem(any()) } returns Result.success(item)
 
             // When
-            val viewModel = ItemDetailViewModel(repository, itemId)
+            val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
 
             // Then
             viewModel.state.test {
@@ -69,12 +73,12 @@ class ItemDetailViewModelTest {
     fun `Full flow - LoadItemRequested intent results in Loading and Error mutations`() = runTest {
         // Given
         val errorMessage = "Not Found"
-        coEvery { repository.getItem(itemId) } returns Result.failure(Exception(errorMessage))
+        coEvery { repository.getItem(any()) } returns Result.failure(Exception(errorMessage))
 
         // When & Then
         turbineScope {
             val eventTurbine = AppEventBus.events.testIn(backgroundScope)
-            val viewModel = ItemDetailViewModel(repository, itemId)
+            val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
 
             viewModel.state.test {
                 assertEquals(ItemDetailState(), awaitItem()) // Initial
@@ -99,12 +103,12 @@ class ItemDetailViewModelTest {
         val item1 = Item(id = itemId, title = "First", body = "Body", userId = 1)
         val item2 = Item(id = itemId, title = "Second", body = "Body", userId = 1)
 
-        coEvery { repository.getItem(itemId) } returnsMany listOf(
+        coEvery { repository.getItem(any()) } returnsMany listOf(
             Result.success(item1),
             Result.success(item2)
         )
 
-        val viewModel = ItemDetailViewModel(repository, itemId)
+        val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
 
         viewModel.state.test {
             // Skip initial load
@@ -127,8 +131,8 @@ class ItemDetailViewModelTest {
     @Test
     fun `Intent to Effect flow - BackClicked triggers NavigateBack effect`() = runTest {
         // Given
-        coEvery { repository.getItem(itemId) } returns Result.success(mockk())
-        val viewModel = ItemDetailViewModel(repository, itemId)
+        coEvery { repository.getItem(any()) } returns Result.success(mockk())
+        val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
         advanceUntilIdle() // Finish init
 
         // When & Then

@@ -63,13 +63,16 @@ class ItemListViewModel @Inject constructor(
     private suspend fun fetchItems() {
         emitMutation(ItemListMutation.Loading)
         // Note: For non-paged initial load or other purposes
-        try {
-            val items = repository.getItems(page = 1, limit = 100)
-            emitMutation(ItemListMutation.ItemsLoaded(items))
-        } catch (e: Exception) {
-            val errorMessage = e.message ?: "Failed to load items"
-            emitMutation(ItemListMutation.Error(errorMessage))
-            AppEventBus.tryEmit(AppEvent.ShowSnackbar(errorMessage))
-        }
+        val result = repository.getItems(page = 1, limit = 100)
+        result.fold(
+            onSuccess = { items ->
+                emitMutation(ItemListMutation.ItemsLoaded(items))
+            },
+            onFailure = { e ->
+                val errorMessage = e.message ?: "Failed to load items"
+                emitMutation(ItemListMutation.Error(errorMessage))
+                AppEventBus.tryEmit(AppEvent.ShowSnackbar(errorMessage))
+            }
+        )
     }
 }

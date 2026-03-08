@@ -1,6 +1,5 @@
 package com.example.ai_sample.ui.feature.list
 
-import androidx.paging.PagingData
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
 import com.example.ai_sample.core.AppEvent
@@ -8,11 +7,9 @@ import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.repository.ItemRepository
 import io.mockk.coEvery
-import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -32,8 +29,6 @@ class ItemListViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        // Mock getItemPager since it's called during ViewModel initialization
-        every { repository.getItemPager() } returns flowOf(PagingData.empty())
     }
 
     @After
@@ -45,7 +40,7 @@ class ItemListViewModelTest {
     fun `LoadItemsRequested succeeds should update state with items`() = runTest {
         // Given
         val items = listOf(Item(id = 1, title = "Title", body = "Body", userId = 1))
-        coEvery { repository.getItems() } returns Result.success(items)
+        coEvery { repository.getItems(any(), any()) } returns Result.success(items)
 
         // When
         val viewModel = ItemListViewModel(repository)
@@ -73,7 +68,12 @@ class ItemListViewModelTest {
     fun `LoadItemsRequested fails should update state with error and emit snackbar`() = runTest {
         // Given
         val errorMessage = "Network Error"
-        coEvery { repository.getItems() } returns Result.failure(Exception(errorMessage))
+        coEvery {
+            repository.getItems(
+                any(),
+                any()
+            )
+        } returns Result.failure(Exception(errorMessage))
 
         // When & Then
         turbineScope {
@@ -101,7 +101,7 @@ class ItemListViewModelTest {
     @Test
     fun `ItemClicked should emit NavigateToDetail effect`() = runTest {
         // Given
-        coEvery { repository.getItems() } returns Result.success(emptyList())
+        coEvery { repository.getItems(any(), any()) } returns Result.success(emptyList())
         val viewModel = ItemListViewModel(repository)
         advanceUntilIdle()
 

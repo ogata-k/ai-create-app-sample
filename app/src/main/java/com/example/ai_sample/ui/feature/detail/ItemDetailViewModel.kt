@@ -24,8 +24,8 @@ class ItemDetailViewModel @Inject constructor(
         TimingMiddleware()
     )
 ) {
-    private val detailRoute = savedStateHandle.toRoute<DetailRoute>()
-    private val itemId = detailRoute.itemId
+    private val route: DetailRoute = savedStateHandle.toRoute<DetailRoute>()
+    private val itemId: Int = route.itemId
 
     init {
         dispatch(ItemDetailIntent.LoadItemRequested(itemId))

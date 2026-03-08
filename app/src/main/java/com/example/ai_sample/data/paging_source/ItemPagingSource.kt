@@ -11,16 +11,20 @@ class ItemPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item> {
         val page = params.key ?: 1
-        return try {
-            val response = repository.getItems(page = page, limit = params.loadSize)
-            LoadResult.Page(
-                data = response,
-                prevKey = if (page == 1) null else page - 1,
-                nextKey = if (response.isEmpty()) null else page + 1
-            )
-        } catch (e: Exception) {
-            LoadResult.Error(e)
-        }
+        val result = repository.getItems(page = page, limit = params.loadSize)
+
+        return result.fold(
+            onSuccess = { items ->
+                LoadResult.Page(
+                    data = items,
+                    prevKey = if (page == 1) null else page - 1,
+                    nextKey = if (items.isEmpty()) null else page + 1
+                )
+            },
+            onFailure = { exception ->
+                LoadResult.Error(exception)
+            }
+        )
     }
 
     override fun getRefreshKey(state: PagingState<Int, Item>): Int? {

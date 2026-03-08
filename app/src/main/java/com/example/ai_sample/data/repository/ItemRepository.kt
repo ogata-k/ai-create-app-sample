@@ -9,8 +9,14 @@ class ItemRepository(
     private val apiService: ApiService
 ) {
 
-    suspend fun getItems(page: Int, limit: Int): List<Item> = withContext(Dispatchers.IO) {
-        apiService.getItems(page = page, limit = limit)
+    suspend fun getItems(page: Int = 1, limit: Int = 20): Result<List<Item>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val response = apiService.getItems(page = page, limit = limit)
+                Result.success(response)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
     }
 
     suspend fun getItem(id: Int): Result<Item> = withContext(Dispatchers.IO) {

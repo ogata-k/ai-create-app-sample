@@ -1,12 +1,12 @@
 package com.example.ai_sample.data.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class Item(
-    @Json(name = "id") val id: Int,
-    @Json(name = "title") val title: String,
-    @Json(name = "body") val body: String,
-    @Json(name = "userId") val userId: Int
+    @SerialName("id") val id: Int,
+    @SerialName("title") val title: String,
+    @SerialName("body") val body: String,
+    @SerialName("userId") val userId: Int
 )
