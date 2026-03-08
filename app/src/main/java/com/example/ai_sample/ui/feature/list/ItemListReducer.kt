@@ -1,6 +1,6 @@
 package com.example.ai_sample.ui.feature.list
 
-import com.example.ai_sample.core.Reducer
+import com.example.ai_sample.ui.core.Reducer
 
 class ItemListReducer : Reducer<ItemListState, ItemListMutation> {
     override fun reduce(currentState: ItemListState, mutation: ItemListMutation): ItemListState {

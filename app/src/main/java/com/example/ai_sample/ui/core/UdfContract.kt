@@ -1,4 +1,4 @@
-package com.example.ai_sample.core
+package com.example.ai_sample.ui.core
 
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,15 +60,4 @@ interface Store<S, I : Intent, E : Effect> {
     val state: StateFlow<S>
     val effects: SharedFlow<E>
     fun dispatch(intent: I)
-}
-
-/**
- * Marker interface for old style Middleware.
- */
-interface Middleware<S, A : Action> {
-    suspend fun process(
-        state: S,
-        action: A,
-        onAction: (Action) -> Unit
-    )
 }

@@ -2,12 +2,12 @@ package com.example.ai_sample.ui.feature.detail
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.example.ai_sample.core.AppEvent
-import com.example.ai_sample.core.AppEventBus
-import com.example.ai_sample.core.BaseViewModel
-import com.example.ai_sample.core.LoggingMiddleware
-import com.example.ai_sample.core.TimingMiddleware
 import com.example.ai_sample.domain.usecase.GetItemUseCase
+import com.example.ai_sample.ui.core.BaseViewModel
+import com.example.ai_sample.ui.global.AppEvent
+import com.example.ai_sample.ui.global.AppEventBus
+import com.example.ai_sample.ui.middleware.action.LoggingMiddleware
+import com.example.ai_sample.ui.middleware.action.TimingMiddleware
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

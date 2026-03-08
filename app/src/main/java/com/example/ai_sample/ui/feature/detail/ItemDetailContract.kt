@@ -1,10 +1,10 @@
 package com.example.ai_sample.ui.feature.detail
 
-import com.example.ai_sample.core.Action
-import com.example.ai_sample.core.Effect
-import com.example.ai_sample.core.Intent
-import com.example.ai_sample.core.Mutation
 import com.example.ai_sample.data.model.Item
+import com.example.ai_sample.ui.core.Action
+import com.example.ai_sample.ui.core.Effect
+import com.example.ai_sample.ui.core.Intent
+import com.example.ai_sample.ui.core.Mutation
 
 data class ItemDetailState(
     val item: Item? = null,

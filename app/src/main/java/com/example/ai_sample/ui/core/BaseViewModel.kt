@@ -1,4 +1,4 @@
-package com.example.ai_sample.core
+package com.example.ai_sample.ui.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

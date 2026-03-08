@@ -1,6 +1,6 @@
 package com.example.ai_sample.ui.feature.detail
 
-import com.example.ai_sample.core.Reducer
+import com.example.ai_sample.ui.core.Reducer
 
 class ItemDetailReducer : Reducer<ItemDetailState, ItemDetailMutation> {
     override fun reduce(

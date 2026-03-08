@@ -3,11 +3,11 @@ package com.example.ai_sample.ui.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import app.cash.turbine.turbineScope
-import com.example.ai_sample.core.AppEvent
-import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.repository.ItemRepository
 import com.example.ai_sample.domain.usecase.GetItemUseCase
+import com.example.ai_sample.ui.global.AppEvent
+import com.example.ai_sample.ui.global.AppEventBus
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers

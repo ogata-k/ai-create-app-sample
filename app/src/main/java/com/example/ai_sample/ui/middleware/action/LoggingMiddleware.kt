@@ -1,6 +1,8 @@
-package com.example.ai_sample.core
+package com.example.ai_sample.ui.middleware.action
 
 import android.util.Log
+import com.example.ai_sample.ui.core.Action
+import com.example.ai_sample.ui.core.ActionMiddleware
 
 /**
  * Middleware that logs every action.

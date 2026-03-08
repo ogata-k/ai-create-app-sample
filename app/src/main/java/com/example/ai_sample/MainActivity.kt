@@ -15,12 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.ai_sample.core.AppEvent
-import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.ui.feature.detail.DetailRoute
 import com.example.ai_sample.ui.feature.detail.ItemDetailRoute
 import com.example.ai_sample.ui.feature.list.ItemListRoute
 import com.example.ai_sample.ui.feature.list.ListRoute
+import com.example.ai_sample.ui.global.AppEvent
+import com.example.ai_sample.ui.global.AppEventBus
 import com.example.ai_sample.ui.theme.AISampleTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.example.ai_sample.core
+package com.example.ai_sample.ui.global
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
