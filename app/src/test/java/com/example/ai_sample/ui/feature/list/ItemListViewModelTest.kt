@@ -6,6 +6,7 @@ import com.example.ai_sample.core.AppEvent
 import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.repository.ItemRepository
+import com.example.ai_sample.domain.usecase.GetItemsUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,7 @@ import org.junit.Test
 class ItemListViewModelTest {
 
     private val repository: ItemRepository = mockk()
+    private val getItemsUseCase: GetItemsUseCase = GetItemsUseCase(repository)
     private val testDispatcher = StandardTestDispatcher()
 
     @Before
@@ -43,7 +45,7 @@ class ItemListViewModelTest {
         coEvery { repository.getItems(any(), any()) } returns Result.success(items)
 
         // When
-        val viewModel = ItemListViewModel(repository)
+        val viewModel = ItemListViewModel(getItemsUseCase)
 
         // Then
         viewModel.state.test {
@@ -78,7 +80,7 @@ class ItemListViewModelTest {
         // When & Then
         turbineScope {
             val eventTurbine = AppEventBus.events.testIn(backgroundScope)
-            val viewModel = ItemListViewModel(repository)
+            val viewModel = ItemListViewModel(getItemsUseCase)
             val stateTurbine = viewModel.state.testIn(backgroundScope)
 
             // Initial state
@@ -102,7 +104,7 @@ class ItemListViewModelTest {
     fun `ItemClicked should emit NavigateToDetail effect`() = runTest {
         // Given
         coEvery { repository.getItems(any(), any()) } returns Result.success(emptyList())
-        val viewModel = ItemListViewModel(repository)
+        val viewModel = ItemListViewModel(getItemsUseCase)
         advanceUntilIdle()
 
         // When & Then

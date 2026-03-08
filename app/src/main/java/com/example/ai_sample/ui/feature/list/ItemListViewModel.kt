@@ -12,14 +12,14 @@ import com.example.ai_sample.core.LoggingMiddleware
 import com.example.ai_sample.core.TimingMiddleware
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.paging_source.ItemPagingSource
-import com.example.ai_sample.data.repository.ItemRepository
+import com.example.ai_sample.domain.usecase.GetItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 @HiltViewModel
 class ItemListViewModel @Inject constructor(
-    private val repository: ItemRepository
+    private val getItemsUseCase: GetItemsUseCase
 ) : BaseViewModel<ItemListState, ItemListIntent, ItemListAction, ItemListMutation, ItemListEffect>(
     initialState = ItemListState(),
     reducer = ItemListReducer(),
@@ -35,7 +35,7 @@ class ItemListViewModel @Inject constructor(
             pageSize = 20,
             enablePlaceholders = false
         ),
-        pagingSourceFactory = { ItemPagingSource(repository) }
+        pagingSourceFactory = { ItemPagingSource(getItemsUseCase) }
     )
         .flow
         .cachedIn(viewModelScope)
@@ -63,7 +63,7 @@ class ItemListViewModel @Inject constructor(
     private suspend fun fetchItems() {
         emitMutation(ItemListMutation.Loading)
         // Note: For non-paged initial load or other purposes
-        val result = repository.getItems(page = 1, limit = 100)
+        val result = getItemsUseCase(page = 1, limit = 100)
         result.fold(
             onSuccess = { items ->
                 emitMutation(ItemListMutation.ItemsLoaded(items))

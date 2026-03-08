@@ -7,6 +7,7 @@ import com.example.ai_sample.core.AppEvent
 import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.data.model.Item
 import com.example.ai_sample.data.repository.ItemRepository
+import com.example.ai_sample.domain.usecase.GetItemUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,7 @@ import org.junit.Test
 class ItemDetailViewModelTest {
 
     private val repository: ItemRepository = mockk()
+    private val getItemUseCase: GetItemUseCase = GetItemUseCase(repository)
     private val testDispatcher = StandardTestDispatcher()
     private val itemId = 1
 
@@ -49,7 +51,7 @@ class ItemDetailViewModelTest {
             coEvery { repository.getItem(any()) } returns Result.success(item)
 
             // When
-            val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
+            val viewModel = ItemDetailViewModel(getItemUseCase, createSavedStateHandle())
 
             // Then
             viewModel.state.test {
@@ -78,7 +80,7 @@ class ItemDetailViewModelTest {
         // When & Then
         turbineScope {
             val eventTurbine = AppEventBus.events.testIn(backgroundScope)
-            val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
+            val viewModel = ItemDetailViewModel(getItemUseCase, createSavedStateHandle())
 
             viewModel.state.test {
                 assertEquals(ItemDetailState(), awaitItem()) // Initial
@@ -108,7 +110,7 @@ class ItemDetailViewModelTest {
             Result.success(item2)
         )
 
-        val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
+        val viewModel = ItemDetailViewModel(getItemUseCase, createSavedStateHandle())
 
         viewModel.state.test {
             // Skip initial load
@@ -132,7 +134,7 @@ class ItemDetailViewModelTest {
     fun `Intent to Effect flow - BackClicked triggers NavigateBack effect`() = runTest {
         // Given
         coEvery { repository.getItem(any()) } returns Result.success(mockk())
-        val viewModel = ItemDetailViewModel(repository, createSavedStateHandle())
+        val viewModel = ItemDetailViewModel(getItemUseCase, createSavedStateHandle())
         advanceUntilIdle() // Finish init
 
         // When & Then

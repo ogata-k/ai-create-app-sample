@@ -7,13 +7,13 @@ import com.example.ai_sample.core.AppEventBus
 import com.example.ai_sample.core.BaseViewModel
 import com.example.ai_sample.core.LoggingMiddleware
 import com.example.ai_sample.core.TimingMiddleware
-import com.example.ai_sample.data.repository.ItemRepository
+import com.example.ai_sample.domain.usecase.GetItemUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
 class ItemDetailViewModel @Inject constructor(
-    private val repository: ItemRepository,
+    private val getItemUseCase: GetItemUseCase,
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<ItemDetailState, ItemDetailIntent, ItemDetailAction, ItemDetailMutation, ItemDetailEffect>(
     initialState = ItemDetailState(),
@@ -47,7 +47,7 @@ class ItemDetailViewModel @Inject constructor(
 
     private suspend fun fetchItem(id: Int) {
         emitMutation(ItemDetailMutation.Loading)
-        repository.getItem(id)
+        getItemUseCase(id)
             .onSuccess { item ->
                 emitMutation(ItemDetailMutation.ItemLoaded(item))
             }
